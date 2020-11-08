@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link</title>
+    <link rel="stylesheet" href="reset.css">
+    <style>
+     html {
+       background-color: #eee9e9; /* snow2 */
+       font-family: Ubuntu, Meiryo, sans-serif;
+     }
+
+     body {
+       margin: 0 auto;
+       width: 80%;
+     }
+
+     header, footer {
+       background-color: MediumSeaGreen;
+       color: honeydew;
+     }
+
+     main {
+       display: grid;
+       grid-template-columns: 1fr 1fr;
+       grid-row-gap: 1px;
+       grid-column-gap: 1px;
+     }
+
+     article {
+       background-color: #fff;
+       padding: 15px;
+     }
+
+     h1,
+     h2 {
+       font-weight: bold;
+     }
+
+     h1 {
+       font-size : 2.5rem;
+       padding: 15px 0;
+       text-align: center;
+     }
+
+     h2 {
+       color: SeaGreen;
+       font-size : 1.3rem;
+       padding-bottom: 10px;
+     }
+
+     footer p {
+       font-size: .9rem;
+       padding: 7px;
+       text-align: center;
+     }
+
+     ul {
+       display: flex;
+     }
+
+     li {
+       margin-right: 0.5rem;
+     }
+
+     a:hover {
+       color: red;
+     }
+
+     @media screen and (max-width: 1024px) {
+       body {
+         width: 100%;
+       }
+
+       main {
+         grid-template-columns: 1fr;
+       }
+
+       h1 {
+         font-size : 2.0rem;
+       }
+
+       ul {
+         display: inline;
+       }
+
+       li {
+         margin: 0 0 0 0.5rem;
+       }
+
+       li:not(:first-child) {
+         margin-top: 10px;
+       }
+     }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>Link</h1>
+    </header>
+
+    <main>
+      <article>
+        <h2>Google</h2>
+        <ul>
+          <li><a href="http://www.google.co.jp/">Top</a></li>
+          <li><a href="http://keep.google.com/">Keep</a></li>
+          <li><a href="https://docs.google.com/spreadsheets/u/0/">スプレッドシート</a></li>
+          <li><a href="https://analytics.google.com/analytics/web/">アナリティクス</a></li>
+        </ul>
+      </article>
+    </main>
+
+    <footer>
+      <p>&copy; copyright 2020 Naoyoshi Murakami</p>
+    </footer>
+  </body>
+</html>
