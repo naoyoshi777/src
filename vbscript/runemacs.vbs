@@ -1,8 +1,18 @@
 '===============================================================================
-' WSL 上の Emacs を起動する
+' Run Emacs on WSL
 '
-' ※VcXsrv の起動が前提
+' Arguments:
+'   %1  path to file [OPTIONAL]
 '===============================================================================
+cmd = "bash -lc ""emacs --chdir=${HOME}"""
+
+If Wscript.Arguments.Count <> 0 Then
+   Set fs = CreateObject("Scripting.FileSystemObject")
+   If fs.FileExists(Wscript.Arguments(0)) Then
+      path = Replace(fs.GetFile(Wscript.Arguments(0)), "\", "\\")
+      cmd = "bash -lc ""emacs --chdir=${HOME} $(wslpath " & path & ")"""
+   End If
+End If
+
 Set oShell = CreateObject("Wscript.shell")
-cmd = "bash -l -c ""xset -r 49 && cd && emacs"""
 oShell.Run cmd, 0, false
