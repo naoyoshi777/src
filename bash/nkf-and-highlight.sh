@@ -4,7 +4,7 @@
 #
 # Append the following lines to ~/.bashrc.
 #
-#   if type nkf-and-highlight &> /dev/null; then
+#   if type nkf-and-highlight.sh &> /dev/null; then
 #     LESSOPEN="| $_ %s"
 #   fi
 
