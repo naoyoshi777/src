@@ -60,6 +60,8 @@ min=
 if (( duration >= 60 )); then
   min=$(( duration / 60 ))
   duration=$(( duration % 60 ))
+elif [ "${hr}" ]; then
+  min=0
 fi
 
 sec=${duration}
