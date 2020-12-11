@@ -226,28 +226,3 @@ utils::wait_for_input_y_or_n() {
     fi
   done
 }
-
-################################################################################
-# Convert duration to hh:mm:ss
-#
-# Arguments:
-#   $1  duration [sec]
-################################################################################
-utils::convert_duration_to_hhmmss() {
-  local -i hour=0
-  local -i minute=0
-
-  if ((duration >= 3600)); then
-    hour=$((duration / 3600))
-    duration=$((duration % 3600))
-  fi
-
-  if ((duration >= 60)); then
-    minute=$((duration / 60))
-    duration=$((duration % 60))
-  fi
-
-  local -i sec=${duration}
-
-  echo "Time: ${hour}h ${minute}m ${sec}s"
-}
