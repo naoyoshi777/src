@@ -24,7 +24,9 @@ fi
 
 code="$(nkf -g "$1")"
 
-if [ "${code}" = 'ASCII' ] || [ "${code:0:3}" = 'UTF' ]; then
+if [ "${code}" = 'ASCII' ] || \
+     [ "${code}" = 'BINARY' ] || \
+     [ "${code:0:3}" = 'UTF' ]; then
   "${HILITE_LESSPIPE}" "$1"
 else
   tmpfile="$(mktemp --suffix ".${1##*.}")"
