@@ -197,7 +197,7 @@ EOF
 # Wait until the user inputs 'y' or 'n'.
 #
 # Arguments:
-#   $1  defualt answer ('y' or 'n')
+#   $1  default answer ('y' or 'n')
 #   $2  prompt
 ################################################################################
 utils::wait_for_input_y_or_n() {
