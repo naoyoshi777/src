@@ -1,4 +1,4 @@
-#!/bin/bash -u
+#!/bin/bash
 #
 # Utility functions by BASH builtin commands
 
