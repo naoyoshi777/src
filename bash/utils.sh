@@ -195,15 +195,17 @@ EOF
 #   $1  default answer ('y' or 'n')
 #   $2  prompt
 ################################################################################
-utils::wait_for_input_y_or_n() {
-  local prompt=
-  local -i ret=
+utils::y_or_n() {
+  if [ $# -lt 2 ] || [[ ! "$1" =~ ^[yn]$ ]]; then
+    echo 'invalid argument' >&2
+    return 1
+  fi
 
-  if [ "${1,,}" = 'y' ]; then
-    prompt=$(echo -e "\e[1;33m$2 [Y/n]? \e[m")
-    ret=0
-  else
-    prompt=$(echo -e "\e[1;33m$2 [y/N]? \e[m")
+  local prompt="$2 [Y/n]? "
+  local -i ret=0
+
+  if [ "$1" = 'n' ]; then
+    prompt="$2 [y/N]? "
     ret=1
   fi
 
