@@ -23,13 +23,16 @@ if [ $# -eq 0 ] || [ ! -f "$1" ]; then
 fi
 
 code="$(nkf -g "$1")"
+if [ $? -ne 0 ]; then
+  exit
+fi
 
 if [ "${code}" = 'ASCII' ] || \
      [ "${code}" = 'BINARY' ] || \
      [ "${code:0:3}" = 'UTF' ]; then
   "${HILITE_LESSPIPE}" "$1"
 else
-  tmpfile="$(mktemp --suffix ".${1##*.}")"
+  tmpfile="$(mktemp --suffix ".$(basename "$1")")"
   nkf -w "$1" > "${tmpfile}"
   "${HILITE_LESSPIPE}" "${tmpfile}"
   rm "${tmpfile}"
