@@ -4,9 +4,9 @@
 
 readonly VERSION='6.6.5'
 
-sudo dpkg -r global 2> /dev/null
+sudo dpkg -P global 2> /dev/null
 sudo apt -y install libncurses5-dev exuberant-ctags python-pip checkinstall || exit $?
-sudo -H pip install pygments "${http_proxy:+--proxy ${http_proxy}}" || exit $?
+sudo -H pip install pygments ${http_proxy:+--proxy ${http_proxy}} || exit $?
 
 wget http://tamacom.com/global/global-${VERSION}.tar.gz || exit $?
 tar xf global-${VERSION}.tar.gz
