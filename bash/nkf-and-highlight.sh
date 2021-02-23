@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Convert input file to UTF-8, then convert to syntax highlighted document
 #
