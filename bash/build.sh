@@ -2,8 +2,6 @@
 #
 # Generic build script
 
-set -u
-
 readonly LOGFILE='buildlog.txt'
 
 SECONDS=0
