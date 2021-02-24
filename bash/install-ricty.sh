@@ -6,7 +6,7 @@ clean_up() {
   cd && rm -rf "${tmpdir}"
 }
 
-if type fontforge &> /dev/null; then
+if ! type fontforge &> /dev/null; then
   sudo apt install fontforge || exit $?
 fi
 
