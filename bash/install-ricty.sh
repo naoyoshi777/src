@@ -7,7 +7,7 @@ clean_up() {
 }
 
 if ! type fontforge &> /dev/null; then
-  sudo apt install fontforge || exit $?
+  sudo apt -y install fontforge || exit $?
 fi
 
 trap 'clean_up' EXIT
