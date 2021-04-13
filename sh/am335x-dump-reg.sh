@@ -356,7 +356,7 @@ show_mcasp()
   show_reg 'PWRIDLESYSCONFIG' ${base} 0x4
   show_reg 'PFUNC' ${base} 0x10
   show_reg 'PDIR' ${base} 0x14
-  show_reg 'POUT' ${base} 0x18
+  show_reg 'PDOUT' ${base} 0x18
   show_reg 'PDIN' ${base} 0x1C
   show_reg 'PDCLR' ${base} 0x20
   show_reg 'GBLCTL' ${base} 0x44
