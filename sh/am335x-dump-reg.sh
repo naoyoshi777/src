@@ -2,6 +2,7 @@
 
 g_devmem=
 g_devmem2=
+g_devmem_cmd=
 
 show_reg()
 {
@@ -17,6 +18,24 @@ show_reg()
   fi
 
   echo "${acronym} ${val}"
+}
+
+
+read_reg()
+{
+  local base=$1
+  local offset=$2
+  local val=
+
+  val=$("${g_devmem_cmd}" $((base + offset))) || return 1
+
+  if [ "${g_devmem_cmd}" = 'devmem' ]; then
+    echo "${val}"
+  else
+    echo "${val}" | awk '/Read/ {print $NF}'
+  fi
+
+  return 0
 }
 
 show_cm_per()
@@ -338,6 +357,7 @@ show_pin_mux()
 show_mcasp()
 {
   local base=
+  local val=
 
   if [ $1 -eq 0 ] && [ "$2" = 'data' ]; then
     base=0x46000000
@@ -352,99 +372,446 @@ show_mcasp()
     return
   fi
 
-  show_reg 'REV' ${base} 0x0
-  show_reg 'PWRIDLESYSCONFIG' ${base} 0x4
-  show_reg 'PFUNC' ${base} 0x10
-  show_reg 'PDIR' ${base} 0x14
-  show_reg 'PDOUT' ${base} 0x18
-  show_reg 'PDIN' ${base} 0x1C
-  show_reg 'PDCLR' ${base} 0x20
-  show_reg 'GBLCTL' ${base} 0x44
-  show_reg 'AMUTE' ${base} 0x48
-  show_reg 'DLBCTL' ${base} 0x4C
-  show_reg 'DITCTL' ${base} 0x50
-  show_reg 'RGBLCTL' ${base} 0x60
-  show_reg 'RMASK' ${base} 0x64
-  show_reg 'RFMT' ${base} 0x68
-  show_reg 'AFSRCTL' ${base} 0x6C
-  show_reg 'ACLKRCTL' ${base} 0x70
-  show_reg 'AHCLKRCTL' ${base} 0x74
-  show_reg 'RTDM' ${base} 0x78
-  show_reg 'RINTCTL' ${base} 0x7C
-  show_reg 'RSTAT' ${base} 0x80
-  show_reg 'RSLOT' ${base} 0x84
-  show_reg 'RCLKCHK' ${base} 0x88
-  show_reg 'REVTCTL' ${base} 0x8C
-  show_reg 'XGBLCTL' ${base} 0xA0
-  show_reg 'XMASK' ${base} 0xA4
-  show_reg 'XFMT' ${base} 0xA8
-  show_reg 'AFSXCTL' ${base} 0xAC
-  show_reg 'ACLKXCTL' ${base} 0xB0
-  show_reg 'AHCLKXCTL' ${base} 0xB4
-  show_reg 'XTDM' ${base} 0xB8
-  show_reg 'XINTCTL' ${base} 0xBC
-  show_reg 'XSTAT' ${base} 0xC0
-  show_reg 'XSLOT' ${base} 0xC4
-  show_reg 'XCLKCHK' ${base} 0xC8
-  show_reg 'XEVTCTL' ${base} 0xCC
-  show_reg 'DITCSRA_0' ${base} 0x100
-  show_reg 'DITCSRA_1' ${base} 0x104
-  show_reg 'DITCSRA_2' ${base} 0x108
-  show_reg 'DITCSRA_3' ${base} 0x10C
-  show_reg 'DITCSRA_4' ${base} 0x110
-  show_reg 'DITCSRA_5' ${base} 0x114
-  show_reg 'DITCSRB_0' ${base} 0x118
-  show_reg 'DITCSRB_1' ${base} 0x11C
-  show_reg 'DITCSRB_2' ${base} 0x120
-  show_reg 'DITCSRB_3' ${base} 0x124
-  show_reg 'DITCSRB_4' ${base} 0x128
-  show_reg 'DITCSRB_5' ${base} 0x12C
-  show_reg 'DITUDRA_0' ${base} 0x130
-  show_reg 'DITUDRA_1' ${base} 0x134
-  show_reg 'DITUDRA_2' ${base} 0x138
-  show_reg 'DITUDRA_3' ${base} 0x13C
-  show_reg 'DITUDRA_4' ${base} 0x140
-  show_reg 'DITUDRA_5' ${base} 0x144
-  show_reg 'DITUDRB_0' ${base} 0x148
-  show_reg 'DITUDRB_1' ${base} 0x14C
-  show_reg 'DITUDRB_2' ${base} 0x150
-  show_reg 'DITUDRB_3' ${base} 0x154
-  show_reg 'DITUDRB_4' ${base} 0x158
-  show_reg 'DITUDRB_5' ${base} 0x15C
-  show_reg 'SRCTL_0' ${base} 0x180
-  show_reg 'SRCTL_1' ${base} 0x184
-  show_reg 'SRCTL_2' ${base} 0x188
-  show_reg 'SRCTL_3' ${base} 0x18C
-  show_reg 'SRCTL_4' ${base} 0x190
-  show_reg 'SRCTL_5' ${base} 0x194
-  show_reg 'XBUF_0' ${base} 0x200
-  show_reg 'XBUF_1' ${base} 0x204
-  show_reg 'XBUF_2' ${base} 0x208
-  show_reg 'XBUF_3' ${base} 0x20C
-  show_reg 'XBUF_4' ${base} 0x210
-  show_reg 'XBUF_5' ${base} 0x214
-  show_reg 'RBUF_0' ${base} 0x280
-  show_reg 'RBUF_1' ${base} 0x284
-  show_reg 'RBUF_2' ${base} 0x288
-  show_reg 'RBUF_3' ${base} 0x28C
-  show_reg 'RBUF_4' ${base} 0x290
-  show_reg 'WFIFOCTL' ${base} 0x1000
-  show_reg 'WFIFOSTS' ${base} 0x1004
-  show_reg 'RFIFOCTL' ${base} 0x1008
-  show_reg 'RFIFOSTS' ${base} 0x100C
+  val=$(read_reg ${base} 0x0) || return
+  echo "REV ${val}"
+
+  val=$(read_reg ${base} 0x4)
+  echo "PWRIDLESYSCONFIG ${val}"
+  echo " IDELMODE $((val & 3))"
+
+  val=$(read_reg ${base} 0x10)
+  echo "PFUNC ${val}"
+  echo " AFSR $(((val >> 31) & 1))"
+  echo " AHCLKR $(((val >> 30) & 1))"
+  echo " ACLKR $(((val >> 29) & 1))"
+  echo " AFSX $(((val >> 28) & 1))"
+  echo " AHCLKX $(((val >> 27) & 1))"
+  echo " ACLKX $(((val >> 26) & 1))"
+  echo " AMUTE $(((val >> 25) & 1))"
+  echo " AXR3 $(((val >> 3) & 1))"
+  echo " AXR2 $(((val >> 2) & 1))"
+  echo " AXR1 $(((val >> 1) & 1))"
+  echo " AXR0 $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0x14)
+  echo "PDIR ${val}"
+  echo " AFSR $(((val >> 31) & 1))"
+  echo " AHCLKR $(((val >> 30) & 1))"
+  echo " ACLKR $(((val >> 29) & 1))"
+  echo " AFSX $(((val >> 28) & 1))"
+  echo " AHCLKX $(((val >> 27) & 1))"
+  echo " ACLKX $(((val >> 26) & 1))"
+  echo " AMUTE $(((val >> 25) & 1))"
+  echo " AXR3 $(((val >> 3) & 1))"
+  echo " AXR2 $(((val >> 2) & 1))"
+  echo " AXR1 $(((val >> 1) & 1))"
+  echo " AXR0 $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0x18)
+  echo "PDOUT ${val}"
+  echo " AFSR $(((val >> 31) & 1))"
+  echo " AHCLKR $(((val >> 30) & 1))"
+  echo " ACLKR $(((val >> 29) & 1))"
+  echo " AFSX $(((val >> 28) & 1))"
+  echo " AHCLKX $(((val >> 27) & 1))"
+  echo " ACLKX $(((val >> 26) & 1))"
+  echo " AMUTE $(((val >> 25) & 1))"
+  echo " AXR3 $(((val >> 3) & 1))"
+  echo " AXR2 $(((val >> 2) & 1))"
+  echo " AXR1 $(((val >> 1) & 1))"
+  echo " AXR0 $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0x1C)
+  echo "PDIN ${val}"
+  echo " AFSR $(((val >> 31) & 1))"
+  echo " AHCLKR $(((val >> 30) & 1))"
+  echo " ACLKR $(((val >> 29) & 1))"
+  echo " AFSX $(((val >> 28) & 1))"
+  echo " AHCLKX $(((val >> 27) & 1))"
+  echo " ACLKX $(((val >> 26) & 1))"
+  echo " AMUTE $(((val >> 25) & 1))"
+  echo " AXR3 $(((val >> 3) & 1))"
+  echo " AXR2 $(((val >> 2) & 1))"
+  echo " AXR1 $(((val >> 1) & 1))"
+  echo " AXR0 $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0x20)
+  echo "PDCLR ${val}"
+  echo " AFSR $(((val >> 31) & 1))"
+  echo " AHCLKR $(((val >> 30) & 1))"
+  echo " ACLKR $(((val >> 29) & 1))"
+  echo " AFSX $(((val >> 28) & 1))"
+  echo " AHCLKX $(((val >> 27) & 1))"
+  echo " ACLKX $(((val >> 26) & 1))"
+  echo " AMUTE $(((val >> 25) & 1))"
+  echo " AXR3 $(((val >> 3) & 1))"
+  echo " AXR2 $(((val >> 2) & 1))"
+  echo " AXR1 $(((val >> 1) & 1))"
+  echo " AXR0 $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0x44)
+  echo "GBLCTL ${val}"
+  echo " XFRST $(((val >> 12) & 1))"
+  echo " XSMRST $(((val >> 11) & 1))"
+  echo " XSRCLR $(((val >> 10) & 1))"
+  echo " XHCLKRST $(((val >> 9) & 1))"
+  echo " XCLKRST $(((val >> 8) & 1))"
+  echo " RFRST $(((val >> 4) & 1))"
+  echo " RSMRST $(((val >> 3) & 1))"
+  echo " RSRCLR $(((val >> 2) & 1))"
+  echo " RHCLKRST $(((val >> 1) & 1))"
+  echo " RCLKRST $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0x48)
+  echo "AMUTE ${val}"
+  echo "  XDMAERR $(((val >> 12) & 1))"
+  echo "  RDMAERR $(((val >> 11) & 1))"
+  echo "  XCKFAIL $(((val >> 10) & 1))"
+  echo "  RCKFAIL $(((val >> 9) & 1))"
+  echo "  XSYNCERR $(((val >> 8) & 1))"
+  echo "  RSYNCERR $(((val >> 7) & 1))"
+  echo "  XUNDRN $(((val >> 6) & 1))"
+  echo "  ROVRN $(((val >> 5) & 1))"
+  echo " *INSTAT $(((val >> 4) & 1))"
+  echo "  INEN $(((val >> 3) & 1))"
+  echo "  INPOL $(((val >> 2) & 1))"
+  echo "  MUTEN $(((val >> 0) & 3))"
+
+  val=$(read_reg ${base} 0x4C)
+  echo "DLBCTL ${val}"
+  echo "  MODE $(((val >> 2) & 3))"
+  echo "  ORD $(((val >> 1) & 1))"
+  echo "  DLBEN $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0x50)
+  echo "DITCTL ${val}"
+  echo "  VB $(((val >> 1) & 3))"
+  echo "  VA $(((val >> 1) & 2))"
+  echo "  DITEN $(((val >> 1) & 0))"
+
+  val=$(read_reg ${base} 0x60)
+  echo "RGBLCTL ${val}"
+  echo " *XFRST $(((val >> 12) & 1))"
+  echo " *XSMRST $(((val >> 11) & 1))"
+  echo " *XSRCLR $(((val >> 10) & 1))"
+  echo " *XHCLKRST $(((val >> 9) & 1))"
+  echo " *XCLKRST $(((val >> 8) & 1))"
+  echo "  RFRST $(((val >> 4) & 1))"
+  echo "  RSMRST $(((val >> 3) & 1))"
+  echo "  RSRCLR $(((val >> 2) & 1))"
+  echo "  RHCLKRST $(((val >> 1) & 1))"
+  echo "  RCLKRST $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0x64)
+  echo "RMASK ${val}"
+
+  val=$(read_reg ${base} 0x68)
+  echo "RFMT ${val}"
+  echo "  RDATDLY $(((val >> 16) & 3))"
+  echo "  RRVRS $(((val >> 15) & 1))"
+  echo "  RPAD $(((val >> 13) & 3))"
+  echo "  RPBIT $(((val >> 8) & 0x1F))"
+  echo "  RSSZ $(((val >> 4) & 0xF))"
+  echo "  RBUSEL $(((val >> 3) & 1))"
+  echo "  RROT $(((val >> 0) & 7))"
+
+  val=$(read_reg ${base} 0x6C)
+  echo "AFSRCTL ${val}"
+  echo "  RMOD $(((val >> 7) & 0x1FF))"
+  echo "  FRWID $(((val >> 4) & 1))"
+  echo "  FSRM $(((val >> 1) & 1))"
+  echo "  FSRP $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0x70)
+  echo "ACLKRCTL ${val}"
+  echo "  CLKRP $(((val >> 7) & 1))"
+  echo "  CLKRM $(((val >> 5) & 1))"
+  echo "  CLKRDIV $(((val >> 0) & 0x1F))"
+
+  val=$(read_reg ${base} 0x74)
+  echo "AHCLKRCTL ${val}"
+  echo "  HCLKRM $(((val >> 15) & 1))"
+  echo "  HCLKRP $(((val >> 14) & 1))"
+  echo "  HCLKRDIV $(((val >> 0) & 0xFFF))"
+
+  val=$(read_reg ${base} 0x78)
+  echo "RTDM ${val}"
+
+  val=$(read_reg ${base} 0x7C)
+  echo "RINTCTL ${val}"
+  echo "  RSTAMRM $(((val >> 7) & 1))"
+  echo "  RDAGTA $(((val >> 5) & 1))"
+  echo "  RLAST $(((val >> 4) & 1))"
+  echo "  RDMAERR $(((val >> 3) & 1))"
+  echo "  RCKFAIL $(((val >> 2) & 1))"
+  echo "  RSYNCERR $(((val >> 1) & 1))"
+  echo "  ROVRN $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0x80)
+  echo "RSTAT ${val}"
+  echo "  RERR $(((val >> 8) & 1))"
+  echo "  RDMAERR $(((val >> 7) & 1))"
+  echo "  RSTAFRM $(((val >> 6) & 1))"
+  echo "  RDATA $(((val >> 5) & 1))"
+  echo "  RLAST $(((val >> 4) & 1))"
+  echo " *RTDMSLOT $(((val >> 3) & 1))"
+  echo "  RCKFAIL $(((val >> 2) & 1))"
+  echo "  RSYNCERR $(((val >> 1) & 1))"
+  echo "  ROVRN $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0x84)
+  echo "RSLOT ${val}"
+  echo " *RSLOTCNT $(((val >> 0) & 0x1FF))"
+
+  val=$(read_reg ${base} 0x88)
+  echo "RCLKCHK ${val}"
+  echo "  RCNT $(((val >> 24) & 0xFF))"
+  echo "  RMAX $(((val >> 16) & 0xFF))"
+  echo "  RMIN $(((val >> 8) & 0xFF))"
+  echo "  RPS $(((val >> 0) & 0xF))"
+
+  val=$(read_reg ${base} 0x8C)
+  echo "REVTCTL ${val}"
+  echo "  RDATDMA $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0xA0)
+  echo "XGBLCTL ${val}"
+  echo "  XFRST $(((val >> 12) & 1))"
+  echo "  XSMRST $(((val >> 11) & 1))"
+  echo "  XSRCLR $(((val >> 10) & 1))"
+  echo "  XHCLKRST $(((val >> 9) & 1))"
+  echo "  XCLKRST $(((val >> 8) & 1))"
+  echo " *RFRST $(((val >> 4) & 1))"
+  echo " *RSMRST $(((val >> 3) & 1))"
+  echo " *RSRCLR $(((val >> 2) & 1))"
+  echo " *RHCLKRST $(((val >> 1) & 1))"
+  echo " *RCLKRST $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0xA4)
+  echo "XMASK ${val}"
+
+  val=$(read_reg ${base} 0xA8)
+  echo "XFMT ${val}"
+  echo "  XDATDLY $(((val >> 16) & 3))"
+  echo "  XRVRS $(((val >> 15) & 1))"
+  echo "  XPAD $(((val >> 13) & 3))"
+  echo "  XPBIT $(((val >> 8) & 0x1F))"
+  echo "  XSSZ $(((val >> 4) & 0xF))"
+  echo "  XBUSEL $(((val >> 3) & 1))"
+  echo "  XROT $(((val >> 0) & 7))"
+
+  val=$(read_reg ${base} 0xAC)
+  echo "AFSXCTL ${val}"
+  echo "  XMOD $(((val >> 7) & 0x1FF))"
+  echo "  FXWID $(((val >> 4) & 1))"
+  echo "  FSXM $(((val >> 1) & 1))"
+  echo "  FSXP $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0xB0)
+  echo "ACLKXCTL ${val}"
+  echo "  CLKXP $(((val >> 7) & 1))"
+  echo "  ASYNC $(((val >> 6) & 1))"
+  echo "  CLKXM $(((val >> 5) & 1))"
+  echo "  CLKXDIV $(((val >> 0) & 0x1F))"
+
+  val=$(read_reg ${base} 0xB4)
+  echo "AHCLKXCTL ${val}"
+  echo "  HCLKXM $(((val >> 15) & 1))"
+  echo "  HCLKXP $(((val >> 14) & 1))"
+  echo "  HCLKXDIV $(((val >> 11) & 0xFFF))"
+
+  val=$(read_reg ${base} 0xB8)
+  echo "XTDM ${val}"
+
+  val=$(read_reg ${base} 0xBC)
+  echo "XINTCTL ${val}"
+  echo "  XSTAFRM $(((val >> 7) & 1))"
+  echo "  XDATA $(((val >> 5) & 1))"
+  echo "  XLAST $(((val >> 4) & 1))"
+  echo "  XDMAERR $(((val >> 3) & 1))"
+  echo "  XCKFAIL $(((val >> 2) & 1))"
+  echo "  XSYNCERR $(((val >> 1) & 1))"
+  echo "  XUNDRN $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0xC0)
+  echo "XSTAT ${val}"
+  echo "  XERR $(((val >> 8) & 1))"
+  echo "  XDMAERR $(((val >> 7) & 1))"
+  echo "  XSTAFRM $(((val >> 6) & 1))"
+  echo "  XDATA $(((val >> 5) & 1))"
+  echo "  XLAST $(((val >> 4) & 1))"
+  echo " *XTDMSLOT $(((val >> 3) & 1))"
+  echo "  XCKFAIL $(((val >> 2) & 1))"
+  echo "  XSYNCERR $(((val >> 1) & 1))"
+  echo "  XUNDRN $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0xC4)
+  echo "XSLOT ${val}"
+  echo " *XSLOTCNT $(((val >> 0) & 0x3FF))"
+
+  val=$(read_reg ${base} 0xC8)
+  echo "XCLKCHK ${val}"
+  echo " *XCNT $(((val >> 24) & 0xFF))"
+  echo "  XMAX $(((val >> 16) & 0xFF))"
+  echo "  XMIN $(((val >> 8) & 0xFF))"
+  echo "  XPS $(((val >> 0) & 0xF))"
+
+  val=$(read_reg ${base} 0xCC)
+  echo "XEVTCTL ${val}"
+  echo "  XDATDMA $(((val >> 0) & 1))"
+
+  val=$(read_reg ${base} 0x100)
+  echo "DITCSRA_0 ${val}"
+  val=$(read_reg ${base} 0x104)
+  echo "DITCSRA_1 ${val}"
+  val=$(read_reg ${base} 0x108)
+  echo "DITCSRA_2 ${val}"
+  val=$(read_reg ${base} 0x10C)
+  echo "DITCSRA_3 ${val}"
+  val=$(read_reg ${base} 0x110)
+  echo "DITCSRA_4 ${val}"
+  val=$(read_reg ${base} 0x114)
+  echo "DITCSRA_5 ${val}"
+
+  val=$(read_reg ${base} 0x118)
+  echo "DITCSRB_0 ${val}"
+  val=$(read_reg ${base} 0x11C)
+  echo "DITCSRB_1 ${val}"
+  val=$(read_reg ${base} 0x120)
+  echo "DITCSRB_2 ${val}"
+  val=$(read_reg ${base} 0x124)
+  echo "DITCSRB_3 ${val}"
+  val=$(read_reg ${base} 0x128)
+  echo "DITCSRB_4 ${val}"
+  val=$(read_reg ${base} 0x12C)
+  echo "DITCSRB_5 ${val}"
+
+  val=$(read_reg ${base} 0x130)
+  echo "DITUDRA_0 ${val}"
+  val=$(read_reg ${base} 0x134)
+  echo "DITUDRA_1 ${val}"
+  val=$(read_reg ${base} 0x138)
+  echo "DITUDRA_2 ${val}"
+  val=$(read_reg ${base} 0x13C)
+  echo "DITUDRA_3 ${val}"
+  val=$(read_reg ${base} 0x140)
+  echo "DITUDRA_4 ${val}"
+  val=$(read_reg ${base} 0x144)
+  echo "DITUDRA_5 ${val}"
+
+  val=$(read_reg ${base} 0x148)
+  echo "DITUDRB_0 ${val}"
+  val=$(read_reg ${base} 0x14C)
+  echo "DITUDRB_1 ${val}"
+  val=$(read_reg ${base} 0x150)
+  echo "DITUDRB_2 ${val}"
+  val=$(read_reg ${base} 0x154)
+  echo "DITUDRB_3 ${val}"
+  val=$(read_reg ${base} 0x158)
+  echo "DITUDRB_4 ${val}"
+  val=$(read_reg ${base} 0x15C)
+  echo "DITUDRB_5 ${val}"
+
+  val=$(read_reg ${base} 0x180)
+  echo "SRCTL_0 ${val}"
+  echo " *RRDY $(((val >> 5) & 1))"
+  echo " *XRDY $(((val >> 4) & 1))"
+  echo "  DISMOD $(((val >> 2) & 3))"
+  echo "  SRMOD $(((val >> 0) & 3))"
+
+  val=$(read_reg ${base} 0x184)
+  echo "SRCTL_1 ${val}"
+  echo " *RRDY $(((val >> 5) & 1))"
+  echo " *XRDY $(((val >> 4) & 1))"
+  echo "  DISMOD $(((val >> 2) & 3))"
+  echo "  SRMOD $(((val >> 0) & 3))"
+
+  val=$(read_reg ${base} 0x188)
+  echo "SRCTL_2 ${val}"
+  echo " *RRDY $(((val >> 5) & 1))"
+  echo " *XRDY $(((val >> 4) & 1))"
+  echo "  DISMOD $(((val >> 2) & 3))"
+  echo "  SRMOD $(((val >> 0) & 3))"
+
+  val=$(read_reg ${base} 0x18C)
+  echo "SRCTL_3 ${val}"
+  echo " *RRDY $(((val >> 5) & 1))"
+  echo " *XRDY $(((val >> 4) & 1))"
+  echo "  DISMOD $(((val >> 2) & 3))"
+  echo "  SRMOD $(((val >> 0) & 3))"
+
+  val=$(read_reg ${base} 0x190)
+  echo "SRCTL_4 ${val}"
+  echo " *RRDY $(((val >> 5) & 1))"
+  echo " *XRDY $(((val >> 4) & 1))"
+  echo "  DISMOD $(((val >> 2) & 3))"
+  echo "  SRMOD $(((val >> 0) & 3))"
+
+  val=$(read_reg ${base} 0x194)
+  echo "SRCTL_5 ${val}"
+  echo " *RRDY $(((val >> 5) & 1))"
+  echo " *XRDY $(((val >> 4) & 1))"
+  echo "  DISMOD $(((val >> 2) & 3))"
+  echo "  SRMOD $(((val >> 0) & 3))"
+
+  val=$(read_reg ${base} 0x200)
+  echo "XBUF_0 ${val}"
+  val=$(read_reg ${base} 0x204)
+  echo "XBUF_1 ${val}"
+  val=$(read_reg ${base} 0x208)
+  echo "XBUF_2 ${val}"
+  val=$(read_reg ${base} 0x20C)
+  echo "XBUF_3 ${val}"
+  val=$(read_reg ${base} 0x210)
+  echo "XBUF_4 ${val}"
+  val=$(read_reg ${base} 0x214)
+  echo "XBUF_5 ${val}"
+
+  val=$(read_reg ${base} 0x280)
+  echo "RBUF_0 ${val}"
+  val=$(read_reg ${base} 0x284)
+  echo "RBUF_1 ${val}"
+  val=$(read_reg ${base} 0x288)
+  echo "RBUF_2 ${val}"
+  val=$(read_reg ${base} 0x28C)
+  echo "RBUF_3 ${val}"
+  val=$(read_reg ${base} 0x290)
+  echo "RBUF_4 ${val}"
+  val=$(read_reg ${base} 0x294)
+  echo "RBUF_5 ${val}"
+
+  val=$(read_reg ${base} 0x1000)
+  echo "WFIFOCTL ${val}"
+  echo "  WENA $(((val >> 16) & 1))"
+  echo "  WNUMEVT $(((val >> 8) & 0xFF))"
+  echo "  WNUMDMA $(((val >> 0) & 0xFF))"
+
+  val=$(read_reg ${base} 0x1004)
+  echo "WFIFOSTS ${val}"
+  echo " *WLVL $(((val >> 0) & 0xFF))"
+
+  val=$(read_reg ${base} 0x1008)
+  echo "RFIFOCTL ${val}"
+  echo "  RENA $(((val >> 16) & 1))"
+  echo "  RNUMEVT $(((val >> 8) & 0xFF))"
+  echo "  RNUMDMA $(((val >> 0) & 0xFF))"
+
+  val=$(read_reg ${base} 0x100C)
+  echo "RFIFOSTS ${val}"
+  echo " *RLVL $(((val >> 0) & 0xFF))"
 }
 
 main()
 {
   if type devmem &> /dev/null; then
     g_devmem=y
-  fi
-
-  if type devmem2 &> /dev/null; then
+    g_devmem_cmd='devmem'
+  elif type devmem2 &> /dev/null; then
     g_devmem2=y
+    g_devmem_cmd='devmem2'
   fi
 
-  if [ ! "${g_devmem}" ] && [ ! "${g_devmem2}" ]; then
+  if [ ! "${g_devmem_cmd}" ]; then
     echo 'devmem or devmem2 is required'
     exit 1
   fi
