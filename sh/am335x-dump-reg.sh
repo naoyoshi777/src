@@ -801,6 +801,218 @@ show_mcasp()
   echo " *RLVL $(((val >> 0) & 0xFF))"
 }
 
+show_cpsw_ss()
+{
+  local base=0x4a100000
+
+  show_reg 'ID_VER' ${base} 0x00
+  show_reg 'CONTROL' ${base} 0x04
+  show_reg 'SOFT_RESET' ${base} 0x08
+  show_reg 'STAT_PORT_EN' ${base} 0x0c
+  show_reg 'PTYPE' ${base} 0x10
+  show_reg 'SOFT_IDLE' ${base} 0x14
+  show_reg 'THRU_RATE' ${base} 0x18
+  show_reg 'GAP_THRESH' ${base} 0x1c
+  show_reg 'TX_START_WDS' ${base} 0x20
+  show_reg 'FLOW_CONTROL' ${base} 0x24
+  show_reg 'VLAN_LTYPE' ${base} 0x28
+  show_reg 'TS_LTYPE' ${base} 0x2c
+  show_reg 'DLR_LTYPE' ${base} 0x30
+}
+
+show_cpsw_port()
+{
+  local base=0x4a100100
+
+  show_reg 'P0_CONTROL' ${base} 0x00
+  show_reg 'P0_MAX_BLKS' ${base} 0x08
+  show_reg 'P0_BLK_CNT' ${base} 0x0c
+  show_reg 'P0_TX_IN_CTL' ${base} 0x10
+  show_reg 'P0_PORT_VLAN' ${base} 0x14
+  show_reg 'P0_TX_PRI_MAP' ${base} 0x18
+  show_reg 'P0_CPDMA_TX_PRI_MAP' ${base} 0x1c
+  show_reg 'P0_CPDMA_RX_CH_MAP' ${base} 0x20
+  show_reg 'P0_RX_DSCP_PRI_MAP0' ${base} 0x30
+  show_reg 'P0_RX_DSCP_PRI_MAP1' ${base} 0x34
+  show_reg 'P0_RX_DSCP_PRI_MAP2' ${base} 0x38
+  show_reg 'P0_RX_DSCP_PRI_MAP3' ${base} 0x3c
+  show_reg 'P0_RX_DSCP_PRI_MAP4' ${base} 0x40
+  show_reg 'P0_RX_DSCP_PRI_MAP5' ${base} 0x44
+  show_reg 'P0_RX_DSCP_PRI_MAP6' ${base} 0x48
+  show_reg 'P0_RX_DSCP_PRI_MAP7' ${base} 0x4c
+
+  show_reg 'P1_CONTROL' ${base} 0x100
+  show_reg 'P1_MAX_BLKS' ${base} 0x108
+  show_reg 'P1_BLK_CNT' ${base} 0x10c
+  show_reg 'P1_TX_IN_CTL' ${base} 0x110
+  show_reg 'P1_PORT_VLAN' ${base} 0x114
+  show_reg 'P1_TX_PRI_MAP' ${base} 0x118
+  show_reg 'P1_TS_SEQ_MTYPE' ${base} 0x11c
+  show_reg 'P1_SA_LO' ${base} 0x120
+  show_reg 'P1_SA_HI' ${base} 0x124
+  show_reg 'P1_SEND_PERCENT' ${base} 0x128
+  show_reg 'P1_RX_DSCP_PRI_MAP0' ${base} 0x130
+  show_reg 'P1_RX_DSCP_PRI_MAP1' ${base} 0x134
+  show_reg 'P1_RX_DSCP_PRI_MAP2' ${base} 0x138
+  show_reg 'P1_RX_DSCP_PRI_MAP3' ${base} 0x13c
+  show_reg 'P1_RX_DSCP_PRI_MAP4' ${base} 0x140
+  show_reg 'P1_RX_DSCP_PRI_MAP5' ${base} 0x144
+  show_reg 'P1_RX_DSCP_PRI_MAP6' ${base} 0x148
+  show_reg 'P1_RX_DSCP_PRI_MAP7' ${base} 0x14c
+
+  show_reg 'P2_CONTROL' ${base} 0x200
+  show_reg 'P2_MAX_BLKS' ${base} 0x208
+  show_reg 'P2_BLK_CNT' ${base} 0x20c
+  show_reg 'P2_TX_IN_CTL' ${base} 0x210
+  show_reg 'P2_PORT_VLAN' ${base} 0x214
+  show_reg 'P2_TX_PRI_MAP' ${base} 0x218
+  show_reg 'P2_TS_SEQ_MTYPE' ${base} 0x21c
+  show_reg 'P2_SA_LO' ${base} 0x220
+  show_reg 'P2_SA_HI' ${base} 0x224
+  show_reg 'P2_SEND_PERCENT' ${base} 0x228
+  show_reg 'P2_RX_DSCP_PRI_MAP0' ${base} 0x230
+  show_reg 'P2_RX_DSCP_PRI_MAP1' ${base} 0x234
+  show_reg 'P2_RX_DSCP_PRI_MAP2' ${base} 0x238
+  show_reg 'P2_RX_DSCP_PRI_MAP3' ${base} 0x23c
+  show_reg 'P2_RX_DSCP_PRI_MAP4' ${base} 0x240
+  show_reg 'P2_RX_DSCP_PRI_MAP5' ${base} 0x244
+  show_reg 'P2_RX_DSCP_PRI_MAP6' ${base} 0x248
+  show_reg 'P2_RX_DSCP_PRI_MAP7' ${base} 0x24c
+}
+
+show_cpsw_cpdma()
+{
+  local base=0x4a100800
+
+  show_reg 'TX_IDVER' ${base} 0x00
+  show_reg 'TX_CONTROL' ${base} 0x04
+  show_reg 'TX_TEARDOWN' ${base} 0x08
+  show_reg 'RX_IDVER' ${base} 0x10
+  show_reg 'RX_CONTRL' ${base} 0x14
+  show_reg 'RX_TEARDOWN' ${base} 0x18
+  show_reg 'CPDMA_SOFT_RESET' ${base} 0x1c
+  show_reg 'DMACONTROL' ${base} 0x20
+  show_reg 'DMASTATUS' ${base} 0x24
+  show_reg 'RX_BUFFER_OFFSET' ${base} 0x28
+  show_reg 'EMCONTROL' ${base} 0x2c
+  show_reg 'TX_PRI_RATE0' ${base} 0x30
+  show_reg 'TX_PRI_RATE1' ${base} 0x34
+  show_reg 'TX_PRI_RATE2' ${base} 0x38
+  show_reg 'TX_PRI_RATE3' ${base} 0x3c
+  show_reg 'TX_PRI_RATE4' ${base} 0x40
+  show_reg 'TX_PRI_RATE5' ${base} 0x44
+  show_reg 'TX_PRI_RATE6' ${base} 0x48
+  show_reg 'TX_PRI_RATE7' ${base} 0x4c
+  show_reg 'TX_INTSTAT_RAW' ${base} 0x80
+  show_reg 'TX_INTSTAT_MASKED' ${base} 0x84
+  show_reg 'TX_INTSTAT_SET' ${base} 0x88
+  show_reg 'TX_INTSTAT_CLEAR' ${base} 0x8c
+  show_reg 'CPDMA_IN_VECTOR' ${base} 0x90
+  show_reg 'CPDMA_EOI_VECTOR' ${base} 0x94
+  show_reg 'RX_INTSTAT_RAW' ${base} 0xa0
+  show_reg 'RX_INTSTAT_MASKED' ${base} 0xa4
+  show_reg 'RX_INTSTAT_SET' ${base} 0xa8
+  show_reg 'RX_INTSTAT_CLEAR' ${base} 0xac
+  show_reg 'DMA_INTSTAT_RAW' ${base} 0xb0
+  show_reg 'DMA_INTSTAT_MASKED' ${base} 0xb4
+  show_reg 'DMA_INTSTAT_SET' ${base} 0xb8
+  show_reg 'DMA_INTSTAT_CLEAR' ${base} 0xbc
+  show_reg 'RX0_PENDTHRESH' ${base} 0xc0
+  show_reg 'RX1_PENDTHRESH' ${base} 0xc4
+  show_reg 'RX2_PENDTHRESH' ${base} 0xc8
+  show_reg 'RX3_PENDTHRESH' ${base} 0xcc
+  show_reg 'RX4_PENDTHRESH' ${base} 0xd0
+  show_reg 'RX5_PENDTHRESH' ${base} 0xd4
+  show_reg 'RX6_PENDTHRESH' ${base} 0xd8
+  show_reg 'RX7_PENDTHRESH' ${base} 0xdc
+  show_reg 'RX0_FREEBUFFER' ${base} 0xe0
+  show_reg 'RX1_FREEBUFFER' ${base} 0xe4
+  show_reg 'RX2_FREEBUFFER' ${base} 0xe8
+  show_reg 'RX3_FREEBUFFER' ${base} 0xec
+  show_reg 'RX4_FREEBUFFER' ${base} 0xf0
+  show_reg 'RX5_FREEBUFFER' ${base} 0xf4
+  show_reg 'RX6_FREEBUFFER' ${base} 0xf8
+  show_reg 'RX7_FREEBUFFER' ${base} 0xfc
+}
+
+show_cpsw_cpts()
+{
+  local base=0x4a100c00
+
+  show_reg 'CPTS_VER' ${base} 0x00
+  show_reg 'CPTS_CONTROL' ${base} 0x04
+  show_reg 'CPTS_TS_PUSH' ${base} 0x0c
+  show_reg 'CPTS_TS_LOAD_VAL' ${base} 0x10
+  show_reg 'CPTS_TS_LOAD_EN' ${base} 0x14
+  show_reg 'CPTS_INTSTAT_RAW' ${base} 0x20
+  show_reg 'CPTS_INTSTAT_MASKED' ${base} 0x24
+  show_reg 'CPTS_INT_ENABLE' ${base} 0x28
+  show_reg 'CPTS_EVENT_POP' ${base} 0x30
+  show_reg 'CPTS_EVENT_LOW' ${base} 0x34
+  show_reg 'CPTS_EVENT_HIGH' ${base} 0x38
+}
+
+show_cpsw_ale()
+{
+  local base=0x4a100d00
+
+  show_reg 'IDVER' ${base} 0x00
+  show_reg 'CONTROL' ${base} 0x08
+  show_reg 'PRESCALE' ${base} 0x10
+  show_reg 'UNKNOWN_VLAN' ${base} 0x18
+  show_reg 'TBLCTL' ${base} 0x20
+  show_reg 'TBLW2' ${base} 0x34
+  show_reg 'TBLW1' ${base} 0x38
+  show_reg 'TBLW0' ${base} 0x3c
+  show_reg 'PORTCTL0' ${base} 0x40
+  show_reg 'PORTCTL1' ${base} 0x44
+  show_reg 'PORTCTL2' ${base} 0x48
+  show_reg 'PORTCTL3' ${base} 0x4c
+  show_reg 'PORTCTL4' ${base} 0x50
+  show_reg 'PORTCTL5' ${base} 0x54
+}
+
+show_cpsw_sl()
+{
+  local base=0x4a100d80
+
+  if [ "$1" = '2' ]; then
+    base=0x4a100dc0
+  fi
+
+  show_reg 'IDVER' ${base} 0x00
+  show_reg 'MACCONTROL' ${base} 0x04
+  show_reg 'MACSTATUS' ${base} 0x08
+  show_reg 'SOFT_RESET' ${base} 0x0c
+  show_reg 'RX_MAXLEN' ${base} 0x10
+  show_reg 'BOFFTEST' ${base} 0x14
+  show_reg 'RX_PAUSE' ${base} 0x18
+  show_reg 'TX_PAUSE' ${base} 0x1c
+  show_reg 'EMCONTROL' ${base} 0x20
+  show_reg 'RX_PRI_MAP' ${base} 0x24
+  show_reg 'TX_GAP' ${base} 0x28
+}
+
+show_mdio()
+{
+  local base=0x4a101000
+
+  show_reg 'MDIOVER' ${base} 0x00
+  show_reg 'MDIOCONTROL' ${base} 0x04
+  show_reg 'MDIOALIVE' ${base} 0x08
+  show_reg 'MDIOLINK' ${base} 0x0c
+  show_reg 'MDIOLINKINTRAW' ${base} 0x10
+  show_reg 'MDIOLINKINTMASKED' ${base} 0x14
+  show_reg 'MDIOUSERINTRAW' ${base} 0x20
+  show_reg 'MDIOUSERINTMASKED' ${base} 0x24
+  show_reg 'MDIOUSERINTMASKSET' ${base} 0x28
+  show_reg 'MDIOUSERINTMASKCLR' ${base} 0x2c
+  show_reg 'MDIOUSERACCESS0' ${base} 0x80
+  show_reg 'MDIOUSERPHYSEL0' ${base} 0x84
+  show_reg 'MDIOUSERACCESS1' ${base} 0x88
+  show_reg 'MDIOUSERPHYSEL1' ${base} 0x8c
+}
+
 main()
 {
   if type devmem &> /dev/null; then
@@ -833,6 +1045,14 @@ main()
     echo "mcasp0-cfg"
     echo "mcasp1-data"
     echo "mcasp1-cfg"
+    echo "cpsw_ss"
+    echo "cpsw_port"
+    echo "cpsw_cpdma"
+    echo "cpsw_cpts"
+    echo "cpsw_ale"
+    echo "cpsw_sl1"
+    echo "cpsw_sl2"
+    echo "mdio"
     exit 1
   fi
 
@@ -866,6 +1086,22 @@ main()
         show_mcasp 1 data ;;
       mcasp1-cfg)
         show_mcasp 1 cfg ;;
+      cpsw_ss)
+        show_cpsw_ss ;;
+      cpsw_port)
+        show_cpsw_port ;;
+      cpsw_cpdma)
+        show_cpsw_cpdma ;;
+      cpsw_cpts)
+        show_cpsw_cpts ;;
+      cpsw_ale)
+        show_cpsw_ale ;;
+      cpsw_sl1)
+        show_cpsw_sl ;;
+      cpsw_sl2)
+        show_cpsw_sl 2 ;;
+      mdio)
+        show_mdio ;;
       *)
         echo "${arg}: unknown block name" ;;
     esac
